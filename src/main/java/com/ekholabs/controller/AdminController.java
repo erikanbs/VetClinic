@@ -20,18 +20,18 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ekholabs.dto.UserDto;
 import com.ekholabs.model.Role;
 import com.ekholabs.model.User;
-import com.ekholabs.repository.RoleRepo;
-import com.ekholabs.repository.UserRepo;
+import com.ekholabs.service.RoleService;
+import com.ekholabs.service.UserService;
 
 @RestController
 @RequestMapping(path = "/vet/admin")
 public class AdminController {
 	
 	@Autowired
-	private UserRepo userRepo;
+	private UserService userService;
 	
 	@Autowired
-	private RoleRepo roleRepo;
+	private RoleService roleService;
 	
 	@Autowired
     private ModelMapper modelMapper;
@@ -39,18 +39,22 @@ public class AdminController {
 	@PostMapping(path = "/users/save")
 	@ResponseStatus(HttpStatus.CREATED)
 	public void createUser(@RequestBody @Validated UserDto user) {
-		Role role = roleRepo.findById(user.getRoleId());		
-		userRepo.save(new User(user.getFullName(), user.getEmail(), user.getFunction(), user.getDateIn(), role));
+		Role role = roleService.findOne(user.getRoleId());	
+		User newUser = new User(user.getFullName(), user.getEmail(), user.getFunction(), user.getDateIn(), role);
+		userService.create(newUser);
 	}
 	
 	@GetMapping(path = "/users/getAll")
 	public List<User> getAllUsers() {
-		return userRepo.findAll();
+		return userService.findAll();
 	}
 	
 	@GetMapping(path = "/users/{userId}")
 	public UserDto getUser(@PathVariable(value = "userId") int userId) {
-		User user = userRepo.findOne(userId);
+		User user = userService.findOne(userId);
+//		if (user == null) {
+//			throw new NoSuchElementException("User does not exist: " + userId);
+//		}
 		return convertToDto(user);
 	}
 	
@@ -63,18 +67,18 @@ public class AdminController {
 		if (userDto.getEmail() != null) {
 			user.setEmail(userDto.getEmail());
 		}
-		return convertToDto(userRepo.save(user));
+		return convertToDto(userService.save(user));
 		
 	}
 	
 	@RequestMapping(path = "/users/{userId}", method = RequestMethod.DELETE)
 	public void delete(@PathVariable(value = "userId") int userId) {
 		User user = verifyUser(userId);
-		userRepo.delete(user);
+		userService.delete(user);
 	}
 	
 	private User verifyUser(int id) throws NoSuchElementException {
-		User user = userRepo.findOne(id);
+		User user = userService.findOne(id);
 		if (user == null) {
 			throw new NoSuchElementException("User does not exist: " + id);
 		}

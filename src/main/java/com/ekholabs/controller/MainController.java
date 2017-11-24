@@ -22,44 +22,45 @@ import com.ekholabs.dto.ClientDto;
 import com.ekholabs.dto.PetDto;
 import com.ekholabs.model.Client;
 import com.ekholabs.model.Pet;
-import com.ekholabs.repository.ClientRepo;
-import com.ekholabs.repository.PetRepo;
+import com.ekholabs.service.ClientService;
+import com.ekholabs.service.PetService;
 
 @RestController
 @RequestMapping(path = "/vet")
 public class MainController {
 	
 	@Autowired
-	private ClientRepo clientRepo;
+	private ClientService clientService;
 	
 	@Autowired
-	private PetRepo petRepo;
+	private PetService petService;
 	
 	@Autowired
     private ModelMapper modelMapper;
 	
 	@GetMapping(path = "/client/getAll")
 	public List<Client> getAllClients() {
-		return clientRepo.findAll();
+		return clientService.findAll();
 	}
 	
 	@GetMapping(path = "/client/{clientId}")
 	public ClientDto getClient(@PathVariable(value = "clientId") int clientId) {
-		Client client = clientRepo.findOne(clientId);
+		Client client = clientService.findById(clientId);
 		return convertClientToDto(client);
 	}
 	
 	@PostMapping(path = "/client/save")
 	@ResponseStatus(HttpStatus.CREATED)
-	public void createClient(@RequestBody @Validated ClientDto client) {	
-		clientRepo.save(new Client(client.getFullName(), client.getEmail()));
+	public Client createClient(@RequestBody @Validated ClientDto client) {	
+		Client newClient = new Client(client.getFullName(), client.getEmail());
+		return clientService.save(newClient);
 	}
 	
 	@RequestMapping(path = "/client/{userId}", method = RequestMethod.PATCH)
 	public ClientDto updateClient(@PathVariable(value = "clientId") int clientId,
 			@RequestBody @Validated ClientDto clientDto) {
 		
-		Client client = clientRepo.findOne(clientId);
+		Client client = clientService.findById(clientId);
 		if (client == null) {
 			throw new NoSuchElementException("Client does not exist: " + clientId);
 		}
@@ -67,16 +68,16 @@ public class MainController {
 		if (clientDto.getEmail() != null) {
 			client.setEmail(clientDto.getEmail());
 		}
-		return convertClientToDto(clientRepo.save(client));		
+		return convertClientToDto(clientService.save(client));		
 	}
 	
 	@RequestMapping(path = "/client/{clientId}", method = RequestMethod.DELETE)
 	public void deleteClient(@PathVariable(value = "clientId") int clientId) {
-		Client client = clientRepo.findOne(clientId);
+		Client client = clientService.findById(clientId);
 		if (client == null) {
 			throw new NoSuchElementException("Client does not exist: " + clientId);
 		}
-		clientRepo.delete(client);
+		clientService.delete(client);
 	}
 	
 	private ClientDto convertClientToDto(Client client) {		
@@ -91,28 +92,28 @@ public class MainController {
 	
 	@GetMapping(path = "/pet/getAll")
 	public List<Pet> getAllPetss() {
-		return petRepo.findAll();
+		return petService.findAll();
 	}
 	
 	@GetMapping(path = "/pet/{petId}")
 	public PetDto getPet(@PathVariable(value = "petId") int petId) {
-		Pet pet = petRepo.findOne(petId);
+		Pet pet = petService.findById(petId);
 		return convertPetToDto(pet);
 	}
 	
 	@PostMapping(path = "/pet/save")
 	@ResponseStatus(HttpStatus.CREATED)
 	public void createPet(@RequestBody @Validated PetDto pet) {	
-		Client owner = clientRepo.findById(pet.getOwnerId());
+		Client owner = clientService.findById(pet.getOwnerId());
 		Pet newPet = new Pet(pet.getName(), pet.getCategory(), pet.getBirthday(), owner);
-		petRepo.save(newPet);
+		petService.save(newPet);
 	}
 	
 	@RequestMapping(path = "/pet/{petId}", method = RequestMethod.PATCH)
 	public PetDto updateClient(@PathVariable(value = "petId") int petId,
 			@RequestBody @Validated PetDto petDto) {
 		
-		Pet pet = petRepo.findOne(petId);
+		Pet pet = petService.findById(petId);
 		if (pet == null) {
 			throw new NoSuchElementException("Pet does not exist: " + petId);
 		}
@@ -120,16 +121,16 @@ public class MainController {
 		if (petDto.getName() != null) {
 			pet.setName(petDto.getName());
 		}
-		return convertPetToDto(petRepo.save(pet));		
+		return convertPetToDto(petService.save(pet));		
 	}
 	
 	@RequestMapping(path = "/pet/{petId}", method = RequestMethod.DELETE)
 	public void deletePet(@PathVariable(value = "petId") int petId) {
-		Pet pet = petRepo.findOne(petId);
+		Pet pet = petService.findById(petId);
 		if (pet == null) {
 			throw new NoSuchElementException("Pet does not exist: " + petId);
 		}
-		petRepo.delete(pet);
+		petService.delete(pet);
 	}
 	
 	private PetDto convertPetToDto(Pet pet) {
