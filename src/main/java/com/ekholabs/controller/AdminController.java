@@ -27,76 +27,76 @@ import com.ekholabs.service.UserService;
 @RequestMapping(path = "/vet/admin")
 public class AdminController {
 
-	@Autowired
-	private UserService userService;
+    @Autowired
+    private UserService userService;
 
-	@Autowired
-	private RoleService roleService;
+    @Autowired
+    private RoleService roleService;
 
-	@Autowired
-	private ModelMapper modelMapper;
+    @Autowired
+    private ModelMapper modelMapper;
 
-	@PostMapping(path = "/users/save")
-	@ResponseStatus(HttpStatus.CREATED)
-	public void createUser(@RequestBody @Validated UserDto user) {
-		Role role = roleService.findOne(user.getRoleId());
-		User newUser = new User(user.getFullName(), user.getEmail(), user.getFunction(), user.getDateIn(), role);
-		userService.create(newUser);
-	}
+    @PostMapping(path = "/users/save")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void createUser(@RequestBody @Validated UserDto user) {
+        Role role = roleService.findOne(user.getRoleId());
+        User newUser = new User(user.getFullName(), user.getEmail(), user.getFunction(), user.getDateIn(), role);
+        userService.create(newUser);
+    }
 
-	@GetMapping(path = "/users/getAll")
-	public List<User> getAllUsers() {
-		return userService.findAll();
-	}
+    @GetMapping(path = "/users/getAll")
+    public List<User> getAllUsers() {
+        return userService.findAll();
+    }
 
-	@GetMapping(path = "/users/{userId}")
-	public UserDto getUser(@PathVariable(value = "userId") int userId) {
-		User user = userService.findOne(userId);
-		// if (user == null) {
-		// throw new NoSuchElementException("User does not exist: " + userId);
-		// }
-		return convertToDto(user);
-	}
+    @GetMapping(path = "/users/{userId}")
+    public UserDto getUser(@PathVariable(value = "userId") int userId) {
+        User user = userService.findOne(userId);
+        // if (user == null) {
+        // throw new NoSuchElementException("User does not exist: " + userId);
+        // }
+        return convertToDto(user);
+    }
 
-	@RequestMapping(path = "/users/{userId}", method = RequestMethod.PATCH)
-	public UserDto updateUser(@PathVariable(value = "userId") int userId, @RequestBody @Validated UserDto userDto) {
+    @RequestMapping(path = "/users/{userId}", method = RequestMethod.PATCH)
+    public UserDto updateUser(@PathVariable(value = "userId") int userId, @RequestBody @Validated UserDto userDto) {
 
-		User user = verifyUser(userId);
+        User user = verifyUser(userId);
 
-		if (userDto.getEmail() != null) {
-			user.setEmail(userDto.getEmail());
-		}
-		return convertToDto(userService.save(user));
+        if (userDto.getEmail() != null) {
+            user.setEmail(userDto.getEmail());
+        }
+        return convertToDto(userService.save(user));
 
-	}
+    }
 
-	@RequestMapping(path = "/users/{userId}", method = RequestMethod.DELETE)
-	public void delete(@PathVariable(value = "userId") int userId) {
-		User user = verifyUser(userId);
-		userService.delete(user);
-	}
+    @RequestMapping(path = "/users/{userId}", method = RequestMethod.DELETE)
+    public void delete(@PathVariable(value = "userId") int userId) {
+        User user = verifyUser(userId);
+        userService.delete(user);
+    }
 
-	private User verifyUser(int id) throws NoSuchElementException {
-		User user = userService.findOne(id);
-		if (user == null) {
-			throw new NoSuchElementException("User does not exist: " + id);
-		}
-		return user;
-	}
+    private User verifyUser(int id) throws NoSuchElementException {
+        User user = userService.findOne(id);
+        if (user == null) {
+            throw new NoSuchElementException("User does not exist: " + id);
+        }
+        return user;
+    }
 
-	private UserDto convertToDto(User user) {
-		UserDto userDto = modelMapper.map(user, UserDto.class);
-		Role role = user.getRole();
-		if (role != null) {
-			userDto.setRoleDescription(role.getDescription());
-		}
-		return userDto;
-	}
+    private UserDto convertToDto(User user) {
+        UserDto userDto = modelMapper.map(user, UserDto.class);
+        Role role = user.getRole();
+        if (role != null) {
+            userDto.setRoleDescription(role.getDescription());
+        }
+        return userDto;
+    }
 
-	@ResponseStatus(HttpStatus.NOT_FOUND)
-	@ExceptionHandler(NoSuchElementException.class)
-	public String return400(NoSuchElementException ex) {
-		return ex.getMessage();
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(NoSuchElementException.class)
+    public String return400(NoSuchElementException ex) {
+        return ex.getMessage();
 
-	}
+    }
 }

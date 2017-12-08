@@ -9,12 +9,12 @@ import com.ekholabs.model.Pet;
 
 public interface PetRepo extends CrudRepository<Pet, Integer> {
 
-	List<Pet> findAll();
+    List<Pet> findAll();
 
-	Pet findById(int id);
+    Pet findById(int id);
 
-	List<Pet> findByNameIgnoreCase(String name);
+    List<Pet> findByNameIgnoreCase(String name);
 
-	List<Pet> findByOwner(Client owner);
+    List<Pet> findByOwner(Client owner);
 
 }

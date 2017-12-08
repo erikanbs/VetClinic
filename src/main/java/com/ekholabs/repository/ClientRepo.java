@@ -8,12 +8,12 @@ import com.ekholabs.model.Client;
 
 public interface ClientRepo extends CrudRepository<Client, Integer> {
 
-	List<Client> findAll();
+    List<Client> findAll();
 
-	Client findById(int id);
+    Client findById(int id);
 
-	List<Client> findByFullNameIgnoreCase(String fullName);
+    List<Client> findByFullNameIgnoreCase(String fullName);
 
-	List<Client> findByEmailIgnoreCase(String email);
+    List<Client> findByEmailIgnoreCase(String email);
 
 }

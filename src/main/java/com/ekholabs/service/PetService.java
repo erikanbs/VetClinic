@@ -13,26 +13,26 @@ import com.ekholabs.repository.PetRepo;
 @Transactional
 public class PetService {
 
-	private final PetRepo petRepo;
+    private final PetRepo petRepo;
 
-	public PetService(PetRepo petRepo) {
-		this.petRepo = petRepo;
-	}
+    public PetService(PetRepo petRepo) {
+        this.petRepo = petRepo;
+    }
 
-	public List<Pet> findAll() {
-		return petRepo.findAll();
-	}
+    public List<Pet> findAll() {
+        return petRepo.findAll();
+    }
 
-	public Pet findById(int id) {
-		return petRepo.findById(id);
-	}
+    public Pet findById(int id) {
+        return petRepo.findById(id);
+    }
 
-	public Pet save(Pet pet) {
-		return petRepo.save(pet);
-	}
+    public Pet save(Pet pet) {
+        return petRepo.save(pet);
+    }
 
-	public void delete(Pet pet) {
-		petRepo.delete(pet);
-	}
+    public void delete(Pet pet) {
+        petRepo.delete(pet);
+    }
 
 }

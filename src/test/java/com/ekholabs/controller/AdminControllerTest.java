@@ -41,48 +41,48 @@ import com.ekholabs.service.UserService;
 @WebAppConfiguration
 public class AdminControllerTest {
 
-	private MockMvc mockMvc;
+    private MockMvc mockMvc;
 
-	@Mock
-	private UserService userService;
+    @Mock
+    private UserService userService;
 
-	@Mock
-	private RoleService roleService;
+    @Mock
+    private RoleService roleService;
 
-	@Spy
-	private ModelMapper modelMapper;
+    @Spy
+    private ModelMapper modelMapper;
 
-	@InjectMocks
-	private AdminController adminController;
+    @InjectMocks
+    private AdminController adminController;
 
-	private MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
-			MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
+    private MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
+            MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
 
-	@Before
-	public void setUp() throws Exception {
-		MockitoAnnotations.initMocks(this);
-		mockMvc = MockMvcBuilders.standaloneSetup(adminController).build();
-	}
+    @Before
+    public void setUp() throws Exception {
+        MockitoAnnotations.initMocks(this);
+        mockMvc = MockMvcBuilders.standaloneSetup(adminController).build();
+    }
 
-	@Test
-	public void testAllUsers() throws Exception {
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-		Date dateIn = formatter.parse("2017-01-01");
-		final Role role = new Role("Admin", "Y");
-		final User user = new User("Erika", "erikanbs@", "Admin", new java.sql.Date(dateIn.getTime()), role);
-		final List<User> users = Arrays.asList(user);
+    @Test
+    public void testAllUsers() throws Exception {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date dateIn = formatter.parse("2017-01-01");
+        final Role role = new Role("Admin", "Y");
+        final User user = new User("Erika", "erikanbs@", "Admin", new java.sql.Date(dateIn.getTime()), role);
+        final List<User> users = Arrays.asList(user);
 
-		final UserDto userDto = new UserDto();
-		userDto.setFullName("Erika");
-		userDto.setEmail("erikanbs@");
+        final UserDto userDto = new UserDto();
+        userDto.setFullName("Erika");
+        userDto.setEmail("erikanbs@");
 
-		when(userService.findAll()).thenReturn(users);
+        when(userService.findAll()).thenReturn(users);
 
-		mockMvc.perform(get("/vet/admin/users/getAll")).andExpect(status().isOk()).andExpect(jsonPath("$", hasSize(1)))
-				.andExpect(content().contentType(contentType)).andExpect(jsonPath("$[0].fullName", is("Erika")))
-				.andExpect(jsonPath("$[0].email", is("erikanbs@"))).andDo(print());
+        mockMvc.perform(get("/vet/admin/users/getAll")).andExpect(status().isOk()).andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(content().contentType(contentType)).andExpect(jsonPath("$[0].fullName", is("Erika")))
+                .andExpect(jsonPath("$[0].email", is("erikanbs@"))).andDo(print());
 
-		verify(userService, times(1)).findAll();
-	}
+        verify(userService, times(1)).findAll();
+    }
 
 }

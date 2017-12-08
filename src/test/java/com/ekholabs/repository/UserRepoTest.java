@@ -26,44 +26,44 @@ import com.ekholabs.model.User;
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
 public class UserRepoTest {
 
-	@Autowired
-	private UserRepo userRepo;
+    @Autowired
+    private UserRepo userRepo;
 
-	@Autowired
-	private RoleRepo roleRepo;
+    @Autowired
+    private RoleRepo roleRepo;
 
-	@Before
-	public void setUp() throws Exception {
-		final Role role = new Role("Admin", "Y");
-		roleRepo.save(role);
+    @Before
+    public void setUp() throws Exception {
+        final Role role = new Role("Admin", "Y");
+        roleRepo.save(role);
 
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-		Date dateIn = formatter.parse("2017-01-01");
-		final User user = new User("Erika", "erikanbs@", "Admin", new java.sql.Date(dateIn.getTime()), role);
-		userRepo.save(user);
-		int id = user.getId();
-		System.out.println("id" + id);
-	}
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date dateIn = formatter.parse("2017-01-01");
+        final User user = new User("Erika", "erikanbs@", "Admin", new java.sql.Date(dateIn.getTime()), role);
+        userRepo.save(user);
+        int id = user.getId();
+        System.out.println("id" + id);
+    }
 
-	@Test
-	public void findAll() {
-		assertEquals("Erika", userRepo.findAll().get(0).getFullName());
-		assertEquals(1, userRepo.findAll().size());
-	}
+    @Test
+    public void findAll() {
+        assertEquals("Erika", userRepo.findAll().get(0).getFullName());
+        assertEquals(1, userRepo.findAll().size());
+    }
 
-	@Test
-	public void findByName() {
-		assertEquals("Erika", userRepo.findAllByFullNameIgnoreCase("ERIKA").get(0).getFullName());
-		assertEquals(1, userRepo.findAllByFullNameIgnoreCase("ERIKA").size());
-	}
+    @Test
+    public void findByName() {
+        assertEquals("Erika", userRepo.findAllByFullNameIgnoreCase("ERIKA").get(0).getFullName());
+        assertEquals(1, userRepo.findAllByFullNameIgnoreCase("ERIKA").size());
+    }
 
-	@Test
-	public void updateName() {
-		final User user = userRepo.findAllByFullNameIgnoreCase("Erika").get(0);
-		user.setFullName("Maria");
-		userRepo.save(user);
+    @Test
+    public void updateName() {
+        final User user = userRepo.findAllByFullNameIgnoreCase("Erika").get(0);
+        user.setFullName("Maria");
+        userRepo.save(user);
 
-		assertEquals("Maria", user.getFullName());
-	}
+        assertEquals("Maria", user.getFullName());
+    }
 
 }

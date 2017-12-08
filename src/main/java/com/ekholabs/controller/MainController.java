@@ -29,120 +29,120 @@ import com.ekholabs.service.PetService;
 @RequestMapping(path = "/vet")
 public class MainController {
 
-	@Autowired
-	private ClientService clientService;
+    @Autowired
+    private ClientService clientService;
 
-	@Autowired
-	private PetService petService;
+    @Autowired
+    private PetService petService;
 
-	@Autowired
-	private ModelMapper modelMapper;
+    @Autowired
+    private ModelMapper modelMapper;
 
-	@GetMapping(path = "/client/getAll")
-	public List<Client> getAllClients() {
-		return clientService.findAll();
-	}
+    @GetMapping(path = "/client/getAll")
+    public List<Client> getAllClients() {
+        return clientService.findAll();
+    }
 
-	@GetMapping(path = "/client/{clientId}")
-	public ClientDto getClient(@PathVariable(value = "clientId") int clientId) {
-		Client client = clientService.findById(clientId);
-		return convertClientToDto(client);
-	}
+    @GetMapping(path = "/client/{clientId}")
+    public ClientDto getClient(@PathVariable(value = "clientId") int clientId) {
+        Client client = clientService.findById(clientId);
+        return convertClientToDto(client);
+    }
 
-	@PostMapping(path = "/client/save")
-	@ResponseStatus(HttpStatus.CREATED)
-	public Client createClient(@RequestBody @Validated ClientDto client) {
-		Client newClient = new Client(client.getFullName(), client.getEmail());
-		return clientService.save(newClient);
-	}
+    @PostMapping(path = "/client/save")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Client createClient(@RequestBody @Validated ClientDto client) {
+        Client newClient = new Client(client.getFullName(), client.getEmail());
+        return clientService.save(newClient);
+    }
 
-	@RequestMapping(path = "/client/{userId}", method = RequestMethod.PATCH)
-	public ClientDto updateClient(@PathVariable(value = "clientId") int clientId,
-			@RequestBody @Validated ClientDto clientDto) {
+    @RequestMapping(path = "/client/{userId}", method = RequestMethod.PATCH)
+    public ClientDto updateClient(@PathVariable(value = "clientId") int clientId,
+            @RequestBody @Validated ClientDto clientDto) {
 
-		Client client = clientService.findById(clientId);
-		if (client == null) {
-			throw new NoSuchElementException("Client does not exist: " + clientId);
-		}
+        Client client = clientService.findById(clientId);
+        if (client == null) {
+            throw new NoSuchElementException("Client does not exist: " + clientId);
+        }
 
-		if (clientDto.getEmail() != null) {
-			client.setEmail(clientDto.getEmail());
-		}
-		return convertClientToDto(clientService.save(client));
-	}
+        if (clientDto.getEmail() != null) {
+            client.setEmail(clientDto.getEmail());
+        }
+        return convertClientToDto(clientService.save(client));
+    }
 
-	@RequestMapping(path = "/client/{clientId}", method = RequestMethod.DELETE)
-	public void deleteClient(@PathVariable(value = "clientId") int clientId) {
-		Client client = clientService.findById(clientId);
-		if (client == null) {
-			throw new NoSuchElementException("Client does not exist: " + clientId);
-		}
-		clientService.delete(client);
-	}
+    @RequestMapping(path = "/client/{clientId}", method = RequestMethod.DELETE)
+    public void deleteClient(@PathVariable(value = "clientId") int clientId) {
+        Client client = clientService.findById(clientId);
+        if (client == null) {
+            throw new NoSuchElementException("Client does not exist: " + clientId);
+        }
+        clientService.delete(client);
+    }
 
-	private ClientDto convertClientToDto(Client client) {
-		ClientDto clientDto = modelMapper.map(client, ClientDto.class);
-		List<Pet> pets = client.getPets();
-		if (pets != null) {
-			List<String> petsDesc = pets.stream().map(Pet::getName).collect(Collectors.toList());
-			clientDto.setPets(petsDesc);
-		}
-		return clientDto;
-	}
+    private ClientDto convertClientToDto(Client client) {
+        ClientDto clientDto = modelMapper.map(client, ClientDto.class);
+        List<Pet> pets = client.getPets();
+        if (pets != null) {
+            List<String> petsDesc = pets.stream().map(Pet::getName).collect(Collectors.toList());
+            clientDto.setPets(petsDesc);
+        }
+        return clientDto;
+    }
 
-	@GetMapping(path = "/pet/getAll")
-	public List<Pet> getAllPetss() {
-		return petService.findAll();
-	}
+    @GetMapping(path = "/pet/getAll")
+    public List<Pet> getAllPetss() {
+        return petService.findAll();
+    }
 
-	@GetMapping(path = "/pet/{petId}")
-	public PetDto getPet(@PathVariable(value = "petId") int petId) {
-		Pet pet = petService.findById(petId);
-		return convertPetToDto(pet);
-	}
+    @GetMapping(path = "/pet/{petId}")
+    public PetDto getPet(@PathVariable(value = "petId") int petId) {
+        Pet pet = petService.findById(petId);
+        return convertPetToDto(pet);
+    }
 
-	@PostMapping(path = "/pet/save")
-	@ResponseStatus(HttpStatus.CREATED)
-	public void createPet(@RequestBody @Validated PetDto pet) {
-		Client owner = clientService.findById(pet.getOwnerId());
-		Pet newPet = new Pet(pet.getName(), pet.getCategory(), pet.getBirthday(), owner);
-		petService.save(newPet);
-	}
+    @PostMapping(path = "/pet/save")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void createPet(@RequestBody @Validated PetDto pet) {
+        Client owner = clientService.findById(pet.getOwnerId());
+        Pet newPet = new Pet(pet.getName(), pet.getCategory(), pet.getBirthday(), owner);
+        petService.save(newPet);
+    }
 
-	@RequestMapping(path = "/pet/{petId}", method = RequestMethod.PATCH)
-	public PetDto updateClient(@PathVariable(value = "petId") int petId, @RequestBody @Validated PetDto petDto) {
+    @RequestMapping(path = "/pet/{petId}", method = RequestMethod.PATCH)
+    public PetDto updateClient(@PathVariable(value = "petId") int petId, @RequestBody @Validated PetDto petDto) {
 
-		Pet pet = petService.findById(petId);
-		if (pet == null) {
-			throw new NoSuchElementException("Pet does not exist: " + petId);
-		}
+        Pet pet = petService.findById(petId);
+        if (pet == null) {
+            throw new NoSuchElementException("Pet does not exist: " + petId);
+        }
 
-		if (petDto.getName() != null) {
-			pet.setName(petDto.getName());
-		}
-		return convertPetToDto(petService.save(pet));
-	}
+        if (petDto.getName() != null) {
+            pet.setName(petDto.getName());
+        }
+        return convertPetToDto(petService.save(pet));
+    }
 
-	@RequestMapping(path = "/pet/{petId}", method = RequestMethod.DELETE)
-	public void deletePet(@PathVariable(value = "petId") int petId) {
-		Pet pet = petService.findById(petId);
-		if (pet == null) {
-			throw new NoSuchElementException("Pet does not exist: " + petId);
-		}
-		petService.delete(pet);
-	}
+    @RequestMapping(path = "/pet/{petId}", method = RequestMethod.DELETE)
+    public void deletePet(@PathVariable(value = "petId") int petId) {
+        Pet pet = petService.findById(petId);
+        if (pet == null) {
+            throw new NoSuchElementException("Pet does not exist: " + petId);
+        }
+        petService.delete(pet);
+    }
 
-	private PetDto convertPetToDto(Pet pet) {
-		PetDto petDto = modelMapper.map(pet, PetDto.class);
-		petDto.setOwnerDescription(pet.getOwner().getFullName());
-		petDto.setOwnerId(pet.getOwner().getId());
-		return petDto;
-	}
+    private PetDto convertPetToDto(Pet pet) {
+        PetDto petDto = modelMapper.map(pet, PetDto.class);
+        petDto.setOwnerDescription(pet.getOwner().getFullName());
+        petDto.setOwnerId(pet.getOwner().getId());
+        return petDto;
+    }
 
-	@ResponseStatus(HttpStatus.NOT_FOUND)
-	@ExceptionHandler(NoSuchElementException.class)
-	public String return400(NoSuchElementException ex) {
-		return ex.getMessage();
-	}
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(NoSuchElementException.class)
+    public String return400(NoSuchElementException ex) {
+        return ex.getMessage();
+    }
 
 }

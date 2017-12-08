@@ -13,34 +13,34 @@ import com.ekholabs.repository.ClientRepo;
 @Transactional
 public class ClientService {
 
-	private final ClientRepo clientRepo;
+    private final ClientRepo clientRepo;
 
-	public ClientService(ClientRepo clientRepo) {
-		this.clientRepo = clientRepo;
-	}
+    public ClientService(ClientRepo clientRepo) {
+        this.clientRepo = clientRepo;
+    }
 
-	public List<Client> findAll() {
-		return clientRepo.findAll();
-	}
+    public List<Client> findAll() {
+        return clientRepo.findAll();
+    }
 
-	public Client findById(int id) {
-		return clientRepo.findById(id);
-	}
+    public Client findById(int id) {
+        return clientRepo.findById(id);
+    }
 
-	public List<Client> findByFullName(String name) {
-		return clientRepo.findByFullNameIgnoreCase(name);
-	}
+    public List<Client> findByFullName(String name) {
+        return clientRepo.findByFullNameIgnoreCase(name);
+    }
 
-	public List<Client> findByEmail(String email) {
-		return clientRepo.findByEmailIgnoreCase(email);
-	}
+    public List<Client> findByEmail(String email) {
+        return clientRepo.findByEmailIgnoreCase(email);
+    }
 
-	public Client save(Client client) {
-		return clientRepo.save(client);
-	}
+    public Client save(Client client) {
+        return clientRepo.save(client);
+    }
 
-	public void delete(Client client) {
-		clientRepo.delete(client);
-	}
+    public void delete(Client client) {
+        clientRepo.delete(client);
+    }
 
 }

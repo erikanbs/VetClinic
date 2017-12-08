@@ -26,36 +26,36 @@ import com.ekholabs.repository.UserRepo;
 @SpringBootTest
 public class UserServiceTest {
 
-	@Autowired
-	private UserService userService;
+    @Autowired
+    private UserService userService;
 
-	@MockBean
-	private UserRepo userRepo;
+    @MockBean
+    private UserRepo userRepo;
 
-	@Before
-	public void setUp() throws Exception {
-		final Role role = new Role("Admin", "Y");
+    @Before
+    public void setUp() throws Exception {
+        final Role role = new Role("Admin", "Y");
 
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-		Date dateIn = formatter.parse("2017-01-01");
-		final User user = new User("Erika", "erikanbs@", "Admin", new java.sql.Date(dateIn.getTime()), role);
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date dateIn = formatter.parse("2017-01-01");
+        final User user = new User("Erika", "erikanbs@", "Admin", new java.sql.Date(dateIn.getTime()), role);
 
-		Mockito.when(userRepo.findAllByFullNameIgnoreCase(user.getFullName())).thenReturn(Arrays.asList(user));
-		Mockito.when(userRepo.findAll()).thenReturn(Arrays.asList(user));
-	}
+        Mockito.when(userRepo.findAllByFullNameIgnoreCase(user.getFullName())).thenReturn(Arrays.asList(user));
+        Mockito.when(userRepo.findAll()).thenReturn(Arrays.asList(user));
+    }
 
-	@Test
-	public void testFindAll() {
-		final List<User> users = userService.findAll();
-		assertEquals(1, users.size());
-		assertEquals("Erika", users.get(0).getFullName());
-	}
+    @Test
+    public void testFindAll() {
+        final List<User> users = userService.findAll();
+        assertEquals(1, users.size());
+        assertEquals("Erika", users.get(0).getFullName());
+    }
 
-	@Test
-	public void testFindByName() {
-		final List<User> users = userService.findByFullName("Erika");
-		assertEquals(1, users.size());
-		assertEquals("Erika", users.get(0).getFullName());
-	}
+    @Test
+    public void testFindByName() {
+        final List<User> users = userService.findByFullName("Erika");
+        assertEquals(1, users.size());
+        assertEquals("Erika", users.get(0).getFullName());
+    }
 
 }
