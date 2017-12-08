@@ -11,27 +11,28 @@ import javax.persistence.OneToMany;
 
 @Entity
 public class Client implements Serializable {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
-	
+
 	private String fullName;
-	
+
 	private String email;
-	
+
 	private String address;
-	
+
 	@OneToMany(mappedBy = "owner")
 	private List<Pet> pets;
-	
-	public Client() {}
+
+	public Client() {
+	}
 
 	public Client(String fullName, String email) {
 		this.fullName = fullName;
 		this.email = email;
 	}
-	
+
 	public Client(String fullName, String email, String address) {
 		this.fullName = fullName;
 		this.email = email;

@@ -3,15 +3,15 @@ package com.ekholabs.dto;
 import java.util.List;
 
 public class ClientDto {
-	
-private Integer id;
-	
+
+	private Integer id;
+
 	private String fullName;
-	
+
 	private String email;
-	
+
 	private String address;
-	
+
 	private List<String> pets;
 
 	public Integer getId() {

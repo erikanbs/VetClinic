@@ -5,23 +5,24 @@ import java.sql.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class UserDto {
-	
-    private Integer id;
-	
+
+	private Integer id;
+
 	private String fullName;
-	
+
 	private String email;
-	
+
 	private String function;
-	
-	@JsonFormat(pattern="yyyy-MM-dd")
+
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date dateIn;
-	
+
 	private Integer roleId;
-	
+
 	private String roleDescription;
-	
-	public UserDto() {}
+
+	public UserDto() {
+	}
 
 	public Integer getId() {
 		return id;
@@ -78,5 +79,5 @@ public class UserDto {
 	public void setRoleDescription(String roleDescription) {
 		this.roleDescription = roleDescription;
 	}
-	
+
 }

@@ -9,14 +9,14 @@ import javax.persistence.Id;
 
 @Entity
 public class Role implements Serializable {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
-	
+
 	private String description;
-	
-	private String active;	
+
+	private String active;
 
 	public Role() {
 	}

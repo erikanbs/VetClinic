@@ -10,17 +10,17 @@ import com.ekholabs.repository.RoleRepo;
 @Service
 @Transactional
 public class RoleService {
-	
+
 	private final RoleRepo roleRepo;
 
 	public RoleService(RoleRepo roleRepo) {
 		this.roleRepo = roleRepo;
 	}
-	
+
 	public Role findOne(int id) {
 		return roleRepo.findById(id);
 	}
-	
+
 	public void save(Role role) {
 		roleRepo.save(role);
 	}

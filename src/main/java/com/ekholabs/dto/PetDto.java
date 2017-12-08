@@ -5,25 +5,25 @@ import java.sql.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class PetDto {
-	
-    private Integer id;
-	
+
+	private Integer id;
+
 	private String name;
-	
+
 	private String category;
-	
+
 	private String breed;
-	
-	@JsonFormat(pattern="yyyy-MM-dd")
+
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date birthday;
-	
-	@JsonFormat(pattern="yyyy-MM-dd")
+
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date deathday;
-	
+
 	private String cause;
-	
+
 	private Integer ownerId;
-	
+
 	private String ownerDescription;
 
 	public Integer getId() {

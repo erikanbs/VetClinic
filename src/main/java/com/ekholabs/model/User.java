@@ -12,28 +12,29 @@ import javax.persistence.ManyToOne;
 
 @Entity
 public class User implements Serializable {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
-	
+
 	private String fullName;
-	
+
 	private String email;
-	
+
 	private String function;
-	
+
 	private String active;
-	
+
 	private Date dateIn;
-	
+
 	private Date dateOut;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "roleId")
 	private Role role;
 
-	public User() {}
+	public User() {
+	}
 
 	public User(String fullName, String email, String function, Date dateIn, Role role) {
 		this.fullName = fullName;
@@ -106,6 +107,6 @@ public class User implements Serializable {
 
 	public void setRole(Role role) {
 		this.role = role;
-	}	
+	}
 
 }

@@ -12,28 +12,29 @@ import javax.persistence.ManyToOne;
 
 @Entity
 public class Pet implements Serializable {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
-	
+
 	private String name;
-	
+
 	private String category;
-	
+
 	private String breed;
-	
+
 	private Date birthday;
-	
+
 	private Date deathday;
-	
+
 	private String cause;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "owner")
 	private Client owner;
-	
-	public Pet() {}
+
+	public Pet() {
+	}
 
 	public Pet(String name, String category, Date birthday, Client owner) {
 		super();
@@ -105,6 +106,6 @@ public class Pet implements Serializable {
 
 	public void setOwner(Client owner) {
 		this.owner = owner;
-	}	
+	}
 
 }

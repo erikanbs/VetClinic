@@ -25,13 +25,13 @@ import com.ekholabs.repository.UserRepo;
 @WebAppConfiguration
 @SpringBootTest
 public class UserServiceTest {
-	
+
 	@Autowired
 	private UserService userService;
-	
+
 	@MockBean
 	private UserRepo userRepo;
-	
+
 	@Before
 	public void setUp() throws Exception {
 		final Role role = new Role("Admin", "Y");
@@ -43,19 +43,19 @@ public class UserServiceTest {
 		Mockito.when(userRepo.findAllByFullNameIgnoreCase(user.getFullName())).thenReturn(Arrays.asList(user));
 		Mockito.when(userRepo.findAll()).thenReturn(Arrays.asList(user));
 	}
-	
+
 	@Test
 	public void testFindAll() {
 		final List<User> users = userService.findAll();
 		assertEquals(1, users.size());
 		assertEquals("Erika", users.get(0).getFullName());
 	}
-	
+
 	@Test
 	public void testFindByName() {
 		final List<User> users = userService.findByFullName("Erika");
 		assertEquals(1, users.size());
 		assertEquals("Erika", users.get(0).getFullName());
-	}	
+	}
 
 }
