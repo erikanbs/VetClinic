@@ -29,18 +29,25 @@ import com.ekholabs.service.PetService;
 @RequestMapping(path = "/vet")
 public class MainController {
 
-    @Autowired
     private ClientService clientService;
-
-    @Autowired
     private PetService petService;
-
-    @Autowired
     private ModelMapper modelMapper;
+    
+    @Autowired
+    public MainController(ClientService clientService, PetService petService, ModelMapper modelMapper) {
+        this.clientService = clientService;
+        this.petService = petService;
+        this.modelMapper = modelMapper;
+    }
 
     @GetMapping(path = "/client/getAll")
-    public List<Client> getAllClients() {
-        return clientService.findAll();
+    public List<ClientDto> getAllClients() {
+        
+        final List<ClientDto> clients = clientService.findAll().stream()
+                .map(client -> modelMapper.map(client, ClientDto.class))
+                .collect(Collectors.toList());
+        
+        return clients;
     }
 
     @GetMapping(path = "/client/{clientId}")
@@ -51,9 +58,9 @@ public class MainController {
 
     @PostMapping(path = "/client/save")
     @ResponseStatus(HttpStatus.CREATED)
-    public Client createClient(@RequestBody @Validated ClientDto client) {
+    public ClientDto createClient(@RequestBody @Validated ClientDto client) {
         Client newClient = new Client(client.getFullName(), client.getEmail());
-        return clientService.save(newClient);
+        return convertClientToDto(clientService.save(newClient));
     }
 
     @RequestMapping(path = "/client/{userId}", method = RequestMethod.PATCH)
